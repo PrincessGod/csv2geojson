@@ -1,0 +1,10 @@
+{
+    "linesjson":
+    {
+        "type": "FeatureCollection",
+        "features": []
+    },
+    "idField": "OBJECTID",
+    "longitudeField": "x",
+    "latitudeField": "y"
+}
