@@ -9,6 +9,35 @@ Clone this repo and install [Node.js](http://nodejs.org/).  From the root direct
 npm install
 ```
 
+If you want to put it to global environment, run:
+```
+npm link
+```
+This allowd you to run the tool anywhere by call `csv2geojson`. Otherwise you can use `node ./bin/index.js` instead.
+
+## Config
+
+File config file at `./bin/config.json`, it should be like this:
+```
+{
+	// Linestrings feature root object
+    "linesjson":
+    {
+        "type": "FeatureCollection",
+        "features": []
+    },
+
+    // The csv field store the global unique id
+    "idField": "OBJECTID",
+
+    // The csv field store longitude
+    "longitudeField": "x",
+
+    // The csv field store latitude
+    "latitudeField": "y"
+}
+```
+
 ## Command line tools
 
 ### Convert csv file to Linestrings feature collection

@@ -1,10 +1,17 @@
 {
+	// Linestrings feature root object
     "linesjson":
     {
         "type": "FeatureCollection",
         "features": []
     },
+
+    // The csv field store the global unique id
     "idField": "OBJECTID",
+
+    // The csv field store longitude
     "longitudeField": "x",
+
+    // The csv field store latitude
     "latitudeField": "y"
 }
