@@ -20,7 +20,7 @@ This allowd you to run the tool anywhere by call `csv2geojson`. Otherwise you ca
 File config file at `./bin/config.json`, it should be like this:
 ```
 {
-	// Linestrings feature root object
+    // Linestrings feature root object
     "linesjson":
     {
         "type": "FeatureCollection",
