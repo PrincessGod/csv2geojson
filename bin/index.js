@@ -3,12 +3,14 @@
 'use strict'
 const fs = require('fs')
 const path = require('path')
+const mkdirp = require('mkdirp');
 const util = require('util')
 const yargs = require('yargs')
-const Promise = require("bluebird");
+const Promise = require("bluebird")
 Promise.promisifyAll(fs);
 
 const csv2lines = require('../lib/csvtolines')
+const csv2points = require('../lib/csvtopoints')
 const defined = require('../lib/defined')
 const defaultValue = require('../lib/defaultValue')
 const DeveloperError = require('../lib/DeveloperError')
@@ -71,7 +73,8 @@ var argv = yargs
             type: 'boolean'
         }
     })
-    .command('toLines', 'Convert csv to Linestrings feature collection geojson.')
+    .command('tolines', 'Convert csv to LineString feature collection geojson.')
+    .command('topoints', 'Convert csv to Point feature collection geojson.')
     .demand(1)
     .recommendCommands()
     .strict()
@@ -98,11 +101,17 @@ runCommand(command, input, output, force, argv)
     });
 
 function runCommand(command, input, output, force, argv) {
-    if (command === 'toLines') {
+    if (command === 'tolines') {
         if (input) {
-            return transformLinestring(input, output, force);
+            return transformFile(input, output, force, csv2lines);
         }
-        return transformFiles(argv.d, output, force);
+        return transformFiles(argv.d, output, force, csv2lines);
+    }
+    if (command === 'topoints') {
+        if (input) {
+            return transformFile(input, output, force, csv2points);
+        }
+        return transformFiles(argv.d, output, force, csv2points);
     }
 
     throw new DeveloperError('Invalid command: ' + command);
@@ -148,7 +157,24 @@ function checkInputFile(file) {
     }
 }
 
-function transformLinestring(inputDirectory, outputPath, force) {
+function transformFile(inputDirectory, outputPath, force, option) {
+    if (outputPath && outputPath.slice(outputPath.length - 5) !== '.json') {
+        return Promise.reject(new DeveloperError('Output path should be a .json file path, received ' + outputPath));
+    }
+
+    outputPath = defaultValue(outputPath, path.join(path.dirname(inputDirectory),
+        path.basename(inputDirectory).replace(/\.[^/.]+$/, "") + '.json'));
+
+    return checkInputFile(inputDirectory)
+        .then(function() {
+            return checkFileOverwritable(outputPath, force)
+                .then(function() {
+                    return option(inputDirectory, outputPath);
+                });
+        })
+}
+
+function transformPoints(inputDirectory, outputPath, force) {
     outputPath = defaultValue(outputPath, path.join(path.dirname(inputDirectory), path.basename(inputDirectory) + '.json'));
     return checkInputFile(inputDirectory)
         .then(function() {
@@ -159,7 +185,7 @@ function transformLinestring(inputDirectory, outputPath, force) {
         })
 }
 
-function transformFiles(inputFolder, outputPath, force) {
+function transformFiles(inputFolder, outputPath, force, option) {
     var allcsv = [];
     var dd = path.resolve(process.cwd(), inputFolder);
     return fs.readdirAsync(dd)
@@ -175,10 +201,11 @@ function transformFiles(inputFolder, outputPath, force) {
                 if (defined(outputPath)) {
                     outPath = path.join(process.cwd(), outputPath);
                 } else {
-                    outPath = process.cwd();
+                    outPath = path.dirname(csv);
                 }
-                outPath = path.join(outPath, path.basename(csv) + '.json');
-                return transformLinestring(csv, outPath, force);
+                outPath = path.join(outPath, path.basename(csv).replace(/\.[^/.]+$/, "") + '.json');
+                console.log(outPath)
+                return transformFile(csv, outPath, force, option);
             })
         })
 }

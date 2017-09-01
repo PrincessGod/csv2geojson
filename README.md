@@ -20,14 +20,14 @@ This allowd you to run the tool anywhere by call `csv2geojson`. Otherwise you ca
 File config file at `./bin/config.json`, it should be like this:
 ```
 {
-    // Linestrings feature root object
+    // FeatureCollection root object, you can add properties you want.
     "linesjson":
     {
         "type": "FeatureCollection",
         "features": []
     },
 
-    // The csv field store the global unique id
+    // The csv feature id, to specify each feature in feature collection.
     "idField": "OBJECTID",
 
     // The csv field store longitude
@@ -40,7 +40,7 @@ File config file at `./bin/config.json`, it should be like this:
 
 ## Command line tools
 
-### Convert csv file to Linestrings feature collection
+### Convert csv file to LineString feature collection
 
 Translate single file.
 
