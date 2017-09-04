@@ -4,7 +4,12 @@
         "type": "FeatureCollection",
         "features": []
     },
-    "idField": "OBJECTID",
+    "pointsjson":
+    {
+        "type": "FeatureCollection",
+        "features": []
+    },
+    "idField": "ORIG_FID",
     "longitudeField": "x",
     "latitudeField": "y"
 }
