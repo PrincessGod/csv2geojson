@@ -199,12 +199,14 @@ function transformFiles(inputFolder, outputPath, force, option) {
             return new Promise.map(allcsv, function(csv) {
                 var outPath = '';
                 if (defined(outputPath)) {
-                    outPath = path.join(process.cwd(), outputPath);
+                    outPath = path.resolve(process.cwd(), outputPath);
                 } else {
                     outPath = path.dirname(csv);
                 }
+
                 outPath = path.join(outPath, path.basename(csv).replace(/\.[^/.]+$/, "") + '.json');
                 console.log(outPath)
+
                 return transformFile(csv, outPath, force, option);
             })
         })
