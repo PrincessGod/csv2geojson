@@ -6,7 +6,7 @@ Node.js library and command-line tools for convert csv to geojson.
 
 Clone this repo and install [Node.js](http://nodejs.org/).  From the root directory of this repo, run:
 ```
-npm install
+npm installx
 ```
 
 If you want to put it to global environment, run:
@@ -20,8 +20,15 @@ This allowd you to run the tool anywhere by call `csv2geojson`. Otherwise you ca
 File config file at `./bin/config.json`, it should be like this:
 ```
 {
-    // FeatureCollection root object, you can add properties you want.
+    // FeatureCollection root object for LineString.
     "linesjson":
+    {
+        "type": "FeatureCollection",
+        "features": []
+    },
+
+    // FeatureCollection root object for Point.
+    "pointsjson":
     {
         "type": "FeatureCollection",
         "features": []
@@ -45,22 +52,52 @@ File config file at `./bin/config.json`, it should be like this:
 Translate single file.
 
 ```
-node ./bin/index.js toLines ./source.csv
+node ./bin/index.js tolines ./source.csv
 ```
 ```
-node ./bin/index.js toLines -i ./source.csv
+node ./bin/index.js tolines -i ./source.csv
 ```
 ```
-node ./bin/index.js toLines -i ./source.csv -o ./result.json
+node ./bin/index.js tolines -i ./source.csv -o ./result.json
 ```
 
 Translate a folder's csv files.
 
 ```
-node ./bin/index.js toLines -d ./sources
+node ./bin/index.js tolines -d ./sources
 ```
 ```
-node ./bin/index.js toLines -d ./sources -o ./results
+node ./bin/index.js tolines -d ./sources -o ./results
+```
+
+|Flag|Description|Required|
+|----|-----------|--------|
+|`-i`, `--input`|Input file path of the csv file.| :white_check_mark: Yes|
+|`-o`, `--output`|Output file path of json file.|No|
+|`-d`, `--directory`|Input directory of csv files folder.|No|
+|`-f`, `--force`|Overwrite output directory if it exists.|No, default `false`|
+
+### Convert csv file to Point feature collection
+
+Translate single file.
+
+```
+node ./bin/index.js topoints ./source.csv
+```
+```
+node ./bin/index.js topoints -i ./source.csv
+```
+```
+node ./bin/index.js topoints -i ./source.csv -o ./result.json
+```
+
+Translate a folder's csv files.
+
+```
+node ./bin/index.js topoints -d ./sources
+```
+```
+node ./bin/index.js topoints -d ./sources -o ./results
 ```
 
 |Flag|Description|Required|
