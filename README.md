@@ -6,7 +6,7 @@ Node.js library and command-line tools for convert csv to geojson.
 
 Clone this repo and install [Node.js](http://nodejs.org/).  From the root directory of this repo, run:
 ```
-npm installx
+npm install
 ```
 
 If you want to put it to global environment, run:
